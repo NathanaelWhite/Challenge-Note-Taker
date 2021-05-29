@@ -2,21 +2,21 @@ const fs = require("fs");
 const router = require("express").Router();
 const db = require("../../data/db.json");
 const { v4: uuidv4 } = require("uuid");
-const path = require('path')
+const path = require("path");
 
 // const notes = [];
 
 router.get("/notes", (req, res) => {
-  let notesData = fs.readFileSync('data/db.json', 'utf8');
+  let notesData = fs.readFileSync("data/db.json", "utf8");
   notesData = JSON.parse(notesData);
   res.json(notesData);
 });
 
 router.post("/notes", (req, res) => {
   // read the json file
-  let notesData = fs.readFileSync('data/db.json', 'utf8');
+  let rawData = fs.readFileSync("data/db.json");
   // parse the data to get an array of objects
-  notesData = JSON.parse(notesData);
+  notesData = JSON.parse(rawData);
 
   const newNote = {
     title: req.body.title,
@@ -26,7 +26,10 @@ router.post("/notes", (req, res) => {
   // add new note to the array of note
   notesData.push(newNote);
 
-  fs.writeFileSync(path.join(__dirname, "../../data/db.json"), JSON.stringify({ notes }, null, 2));
+  fs.writeFileSync(
+    path.join(__dirname, "../../data/db.json"),
+    JSON.stringify(notesData, null, 2)
+  );
 
   res.json(notesData);
 });
