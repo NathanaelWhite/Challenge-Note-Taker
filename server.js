@@ -8,9 +8,10 @@ const app = express();
 
 // app.use(express.static('public'));
     // parse incoming string or array
-// app.use(express.urlencoded({ extend: true }));
+app.use(express.urlencoded({ extend: true }));
     // parse incoming JSON data
-// app.use(express.json());
+app.use(express.json());
+
 
 app.use('/api', apiRoutes);
 // app.use for htmlRoutes
