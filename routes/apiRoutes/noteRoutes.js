@@ -1,43 +1,49 @@
+const fs = require("fs");
 const router = require("express").Router();
-const { notes } = require("../../data/db");
+const db = require("../../data/db.json");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
+
+let notesArray = [];
+
+function createNewNote(db) {
+  
+  let newNote = {
+    "title": db.title,
+    "text": "ex",
+    "id": uuidv4(),
+  };
+  notesArray.push(newNote);
+
+  fs.writeFileSync(
+    path.join(__dirname, '../../data/db.json'),
+    JSON.stringify({ db: notesArray }, null, 2)
+  );
+  console.log(newNote);
+  return notesArray;
+}
 
 router.get("/notes", (req, res) => {
-  let results = notes;
-  if (req.query) {
-    results = filterByQuery(req.query, results);
-  }
+  let results = db;
   res.json(results);
-});
-
-// get route for getting notes by an id
-router.get("/notes/:id", (req, res) => {
-    // use req.params.id
-  const result = findById(req.params.id, notes);
-  if (result) {
-    res.json(result);
-  } else {
-      // if there's an error, send 404
-      res.send(404);
-  }
 });
 
 // post route for posting notes to the server
 router.post("/notes", (req, res) => {
-    // set id based on what the next index of the array will be
-    req.body.id = notes.length.toString();
 
-    // if any data in req.body is incorrect, send 400
-    // if the note fails validation, send 400 and tell user to properly format note
-    if (!validateNote(req.body)) {
-        res.status(400).send('The note is not properly formatted');
-    } else {
-        // if not, createNewNote and res.json the note;
-        // add note to json file and notes array in the func
-        const note = creatNewNote(req.body, notes);
-        res.json(note);
-    }
-})
+  fs.writeFileSync(
+    path.join(__dirname, "../../data/db.json"),
+    JSON.stringify({ db }, null, 2)
+  );
 
+  // if any data in req.body is incorrect, send 400
+  // if the note fails validation, send 400 and tell user to properly format note
+
+  // if not, createNewNote and res.json the note;
+  // add note to json file and notes array in the func
+  const note = createNewNote(req.body, db);
+  res.json(note);
+});
 
 // create filterByQuery, findById, createNewNote, and validateNote
 // functions in lib folder***
