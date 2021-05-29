@@ -7,7 +7,7 @@ const htmlRoutes = require('./routes/htmlRoutes/index');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-// app.use(express.static('public'));
+app.use(express.static('public'));
     // parse incoming string or array
 app.use(express.urlencoded({ extend: true }));
     // parse incoming JSON data
