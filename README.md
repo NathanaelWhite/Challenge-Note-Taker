@@ -2,7 +2,7 @@
 
   ## Description
 
-  An application writing personal notes and keeping track on them.
+  An application for writing personal notes and keeping track on them.
 
   ## Table of Contents
 
